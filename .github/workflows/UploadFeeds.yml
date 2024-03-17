@@ -26,6 +26,12 @@ jobs:
           sudo -E apt-get clean
           df -h
 
+    - name: 获取软件包配置名
+      run: |
+        ls
+        cd ./istoreos/
+        grep -R "PKG_CONFIG_OPTION:=" ./package
+        
     - name: 更新软件包
       run: |
         ls
