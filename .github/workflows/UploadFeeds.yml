@@ -28,7 +28,9 @@ jobs:
 
     - name: 更新软件包
       run: |
-        
+        ls
+        cd ./storeos
+        ls
         ./scripts/feeds update -a
         ./scripts/feeds install -a
     - name: 复制更新后的文件
