@@ -46,4 +46,6 @@ jobs:
       with:
         name: firmware
         path: openwrt-files.zip
-        
+    - name: Print Artifact URL
+      run: |
+        echo "Artifact URL: ${{ steps.<step_id>.outputs.artifact_url }}"  
