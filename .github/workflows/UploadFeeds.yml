@@ -29,7 +29,7 @@ jobs:
     - name: 更新软件包
       run: |
         ls
-        cd ./storeos
+        cd /istoreos
         ls
         ./scripts/feeds update -a
         ./scripts/feeds install -a
