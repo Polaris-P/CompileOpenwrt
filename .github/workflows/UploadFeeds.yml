@@ -33,14 +33,41 @@ jobs:
         ls
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-    - name: 复制更新后的文件
-      run: |
-        ls
-        mkdir -p firmware
-        ls
-        cp -r istoreos firmware/
-    - name: 上传下载
-      uses: actions/upload-artifact@v2
+
+    - name: 创建Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: firmware
-        path: firmware
+        tag_name: v1.0
+        release_name: Release v1.0
+        body: |
+          Description of the release
+        draft: false
+        prerelease: false
+
+    - name: 上传到Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./istoreos
+        asset_name: openwrt.zip
+        asset_content_type: application/gzip
+        
+    - name: 删除workflow
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        retain_days: 0
+        keep_minimum_runs: 2
+
+    - name: 删除老的Releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      with:
+        keep_latest: 3
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
