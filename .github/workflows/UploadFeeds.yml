@@ -11,10 +11,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: git信息
+    - name: 克隆镜像
       run: |
-        git config --global user.email "pengguo2022@163.com"
-        git config --global user.name "Polaris-P"
+        git clone https://github.com/istoreos/istoreos.git
     - name: 环境准备
       run: |
           #sudo rm -rf /usr/share/dotnet /etc/mysql /etc/apt/sources.list.d /usr/local/lib/android /opt/ghc
@@ -32,9 +31,14 @@ jobs:
         
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-
-    - name: Upload firmware
+    - name: 复制更新后的文件
+      run: |
+        ls
+        mkdir -p firmware
+        ls
+        cp -r istoreos firmware/
+    - name: 上传下载
       uses: actions/upload-artifact@v2
       with:
         name: firmware
-        path: ../bin
+        path: firmware
